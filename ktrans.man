@@ -1,0 +1,92 @@
+.TH KTRANS 1
+.SH NAME
+ktrans \- language transliterator
+.SH SYNOPSIS
+.B ktrans
+.SH DESCRIPTION
+The
+.I ktrans
+program works with pipefile(1) which pipes all the input from the keyboard to ktrans,
+and ktrans itself transliterate typed letter sequnces intto characters in languages that
+do not use the Latin character set,  and pipes the result to
+.B /dev/cons.
+The language is selected by typing a control character:
+.TP
+.B ctl-e
+return to default English mode (no transliteration).
+.TP
+.B ctl-n
+Japanese hiragana:
+interpret lower-case letters as a Hepburn representation
+of hiragana.
+In this mode, typing
+.TP
+.B Shift+Space
+looks up the last `word' in a hiragana-kanji dictionary
+and replaces it.
+Subsequent Shift+Space characters cycle through the possibilities.
+A word is the longest immediately preceding
+unbroken string of hiragana characters.
+.TP
+.B ctl-l
+If you want to put the hiragana not converted, you can type.
+.TP
+.B ctl-x
+Read kana-kanji conversion dictionary once more, and renews it.  This will be
+convenient when you updated kana-kanji conversion dictionary on such acme
+editor.In default, the kana-kanji conversion dictionary is read once at beginning and 
+to make a hashed table, which will be arranged so that the last selected candidate will 
+be the first candidate for later search.
+
+.TP
+.B ctl-k
+Japanese katakana.
+.TP
+.B ctl-r
+Russian: interpret letters as Cyrillic;
+the transliteration is mostly phonetic, with
+.B '
+for
+.IR myagkij-znak
+(ь),
+.B ''
+for
+.I tverdyj-znak
+(ъ)
+.I yo
+for ё,
+.B j
+for
+.IR i-kratkaya
+(й).
+.TP
+.B ctl-g
+Greek.
+.PP
+.SH FILES
+.B /bin/pipefile /rc/bin/Kanji
+.SH SOURCE
+.B /sys/src/cmd/ktrans
+.SH "SEE ALSO"
+.IR rio(1)
+.IR pipefile(1)
+.SH EXAMPLE
+If you want to make the Japanese text as below:
+
+私は毎日35分以上歩いて、 更に10分電車に乗って学校に通います。
+ 健康の維持にも役だっていますが、 なかなかたのしいものです。
+
+your keyboard typing stream may be:
+
+watashiHA[^t]mainichi[^t]35[^l]fun[^t]ijou[^t]aruIte, 
+[^t]saraNI[^t]10[^l]fun[^t]denshaNI[^t]noTte[^t]gakkouNI
+[^t]kayoImasu.[^t]kenkouNO[^t]ijiNImo[^t]yakuDAtteimasuga, 
+[^t]nakanaka[^l]tanoshiI[^t]monodesu.[^l]
+
+where [^t], [^l] indicates 'Shift+Space' and 'ctl-l', respectively.  See README.kenji
+for the details of this Japanese input method.
+.SH BUGS
+.PP
+There is no way to generate the control characters literally.
+At the most beggining of a new line, you have to begin with ctl-L
+for successful kana-kanji conversion.

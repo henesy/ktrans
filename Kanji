@@ -1,0 +1,4 @@
+#!/bin/rc
+
+pipefile -r ktrans /dev/cons
+rio -i $home/lib/windows </dev/cons
